@@ -8,6 +8,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/inventory', require('./routes/inventoryRoutes'));
 
 app.get('/', (req, res) => {
   res.send('Pizza API is running');

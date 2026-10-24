@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 const sendEmail = require('../utils/sendEmail');
 
 exports.register = async (req, res) => {
@@ -34,13 +34,13 @@ exports.register = async (req, res) => {
     });
 
     const verifyLink = `http://localhost:5000/api/auth/verify/${verificationToken}`;
-        await sendEmail({
-        to: email,
-        subject: 'Verify your email',
-        html: `<h2>Welcome to Pizza App, ${name}!</h2>
-         <p>Click the link below to verify your email (valid for 24 hours):</p>
-         <a href="${verifyLink}">Verify my email</a>`,
-        });
+    await sendEmail({
+      to: email,
+      subject: 'Verify your email',
+      html: `<h2>Welcome to Pizza App, ${name}!</h2>
+             <p>Click the link below to verify your email (valid for 24 hours):</p>
+             <a href="${verifyLink}">Verify my email</a>`,
+    });
 
     res.status(201).json({ message: 'Registered. Please verify your email.' });
   } catch (err) {
@@ -82,6 +82,12 @@ exports.login = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
+
+    // Admins must use the separate admin login
+    if (user && user.role === 'admin') {
+      return res.status(400).json({ message: 'Invalid email or password' });
+    }
+
     // Same message for wrong email or wrong password, so attackers can't tell which was wrong
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(400).json({ message: 'Invalid email or password' });
@@ -107,9 +113,44 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.adminLogin = async (req, res) => {
+  try {
+    const email = req.body.email?.toLowerCase().trim();
+    const { password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    const user = await User.findOne({ email, role: 'admin' });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(400).json({ message: 'Invalid email or password' });
+    }
+
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
+    res.json({
+      token,
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 exports.getMe = async (req, res) => {
-  const user = await User.findById(req.user.id).select('-password');
-  res.json(user);
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
 };
 
 exports.forgotPassword = async (req, res) => {
