@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <h3>Razorpay test</h3>
+  <input id="token" placeholder="paste user token" size="60"><br><br>
+  <input id="orderId" placeholder="paste order id" size="60"><br><br>
+  <button id="pay">Pay</button>
+  <pre id="out"></pre>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    const API = 'http://localhost:5000/api';
+    const out = document.getElementById('out');
+
+    document.getElementById('pay').onclick = async () => {
+      const token = document.getElementById('token').value.trim();
+      const orderId = document.getElementById('orderId').value.trim();
+      const headers = { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token };
+
+      const res = await fetch(API + '/payments/create', {
+        method: 'POST', headers, body: JSON.stringify({ orderId }),
+      });
+      const data = await res.json();
+      if (!res.ok) { out.textContent = JSON.stringify(data, null, 2); return; }
+
+      const rzp = new Razorpay({
+        key: data.keyId,
+        amount: data.amount,
+        currency: data.currency,
+        order_id: data.razorpayOrderId,
+        name: 'Pizza App',
+        handler: async (response) => {
+          const v = await fetch(API + '/payments/verify', {
+            method: 'POST', headers, body: JSON.stringify({ orderId, ...response }),
+          });
+          out.textContent = JSON.stringify(await v.json(), null, 2);
+        },
+      });
+      rzp.open();
+    };
+  </script>
+</body>
+</html>

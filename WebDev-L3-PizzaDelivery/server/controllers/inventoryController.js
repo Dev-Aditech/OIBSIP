@@ -41,7 +41,7 @@ exports.updateInventory = async (req, res) => {
     }
 
     // Stock is healthy again, so allow future low-stock alerts
-    if (item.quantity > item.threshold) item.lowStockAlertSent = false;
+    if (item.quantity >= item.threshold) item.lowStockAlertSent = false;
 
     await item.save();
     res.json(item);
