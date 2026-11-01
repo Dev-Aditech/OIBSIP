@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Inventory = require('../models/Inventory');
 const Order = require('../models/Order');
+const Address = require('../models/Address');
 
 class HttpError extends Error {
   constructor(status, message) {
@@ -90,12 +91,25 @@ exports.getSummary = async (req, res) => {
 // Creates the order. It stays "pending" until payment is confirmed.
 exports.createOrder = async (req, res) => {
   try {
-    const pizza = await buildPizza(req.body);
+    const { addressId } = req.body;
+    if (addressId && !mongoose.isValidObjectId(addressId)) throw new HttpError(400, 'Invalid address');
+
+    // The two lookups do not depend on each other, so they run at the same time
+    const [pizza, address] = await Promise.all([
+      buildPizza(req.body),
+      addressId ? Address.findOne({ _id: addressId, user: req.user.id }) : null,
+    ]);
+    if (addressId && !address) throw new HttpError(400, 'Address not found');
+
+    // Snapshot the address text, so later edits never change an old order
+    const deliveryAddress = address ? `${address.label}: ${address.line}, ${address.city}. Phone: ${address.phone}` : '';
+
     const order = await Order.create({
       user: req.user.id,
       items: pizza.items,
       quantity: pizza.quantity,
       totalPrice: pizza.totalPrice,
+      deliveryAddress,
     });
     res.status(201).json(order);
   } catch (err) {

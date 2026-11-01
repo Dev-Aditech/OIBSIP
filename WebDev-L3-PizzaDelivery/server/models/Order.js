@@ -25,8 +25,13 @@ const orderSchema = new mongoose.Schema(
       default: 'Order Received',
     },
     stockDeducted: { type: Boolean, default: false },
+    deliveryAddress: { type: String, default: '' },
   },
   { timestamps: true }
 );
+
+// Indexes for the two most common lookups: a customer's orders, and the admin's paid orders
+orderSchema.index({ user: 1, createdAt: -1 });
+orderSchema.index({ paymentStatus: 1, createdAt: -1 });
 
 module.exports = mongoose.model('Order', orderSchema);

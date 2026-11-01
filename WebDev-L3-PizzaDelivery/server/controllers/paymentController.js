@@ -25,28 +25,34 @@ async function completePayment(orderId, paymentId) {
     return { ok: false, code: 409, message: 'This order is not awaiting payment' };
   }
 
-  const deducted = [];
-  for (const item of order.items) {
-    // Only deducts if enough stock is still there
-    const result = await Inventory.updateOne(
-      { _id: item.inventoryId, quantity: { $gte: order.quantity } },
-      { $inc: { quantity: -order.quantity } }
-    );
+  // Every ingredient is deducted at the same time (one wait instead of one per ingredient).
+  // An update only applies if enough stock is still there.
+  const results = await Promise.all(
+    order.items.map((item) =>
+      Inventory.updateOne(
+        { _id: item.inventoryId, quantity: { $gte: order.quantity } },
+        { $inc: { quantity: -order.quantity } }
+      )
+    )
+  );
 
-    if (result.modifiedCount === 0) {
-      // Put back what we already took, then fail the order
-      for (const id of deducted) {
-        await Inventory.updateOne({ _id: id }, { $inc: { quantity: order.quantity } });
-      }
-      order.paymentStatus = 'failed';
-      await order.save();
-      return {
-        ok: false,
-        code: 409,
-        message: `${item.name} just ran out of stock. Your payment was not completed.`,
-      };
-    }
-    deducted.push(item.inventoryId);
+  const failedItem = order.items.find((_, i) => results[i].modifiedCount === 0);
+  if (failedItem) {
+    // Put back whatever was already taken, then fail the order
+    await Promise.all(
+      order.items
+        .filter((_, i) => results[i].modifiedCount === 1)
+        .map((item) =>
+          Inventory.updateOne({ _id: item.inventoryId }, { $inc: { quantity: order.quantity } })
+        )
+    );
+    order.paymentStatus = 'failed';
+    await order.save();
+    return {
+      ok: false,
+      code: 409,
+      message: `${failedItem.name} just ran out of stock. Your payment was not completed.`,
+    };
   }
 
   order.stockDeducted = true;

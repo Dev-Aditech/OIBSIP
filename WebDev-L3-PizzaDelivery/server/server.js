@@ -14,10 +14,23 @@ app.use((req, res, next) => {
   next();
 });
 
+// Prints any request that takes longer than 300 ms, so slow endpoints are easy to spot
+app.use((req, res, next) => {
+  const start = process.hrtime.bigint();
+  res.on('finish', () => {
+    const ms = Number(process.hrtime.bigint() - start) / 1e6;
+    if (ms > 300) console.log(`Slow request: ${req.method} ${req.originalUrl} -> ${res.statusCode} in ${Math.round(ms)} ms`);
+  });
+  next();
+});
+
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/inventory', require('./routes/inventoryRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/payments', require('./routes/paymentRoutes'));
+app.use('/api/wishlist', require('./routes/wishlistRoutes'));
+app.use('/api/addresses', require('./routes/addressRoutes'));
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 app.get('/', (req, res) => {
   res.send('Pizza API is running');

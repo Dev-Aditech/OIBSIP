@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+/* Animations used by the welcome banner, the logout box and the live order tracker */
+@theme {
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-slow-spin: slow-rotate 70s linear infinite;
+  --animate-shimmer: shimmer 3.5s ease-in-out infinite;
+  --animate-rise: rise 0.7s ease-out both;
+  --animate-flicker: flicker 0.9s ease-in-out infinite;
+  --animate-ember: ember 1.8s ease-out infinite;
+  --animate-drive: drive 0.45s ease-in-out infinite;
+  --animate-speed: speed 0.9s linear infinite;
+  --animate-road: road 0.6s linear infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-14px) rotate(6deg); }
+  }
+  @keyframes slow-rotate {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-120%); }
+    55%, 100% { transform: translateX(120%); }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes flicker {
+    0%, 100% { transform: scale(1) rotate(-2deg); }
+    25% { transform: scale(1.1, 1.2) rotate(3deg); }
+    50% { transform: scale(0.95, 1.08) rotate(-3deg); }
+    75% { transform: scale(1.08, 1.16) rotate(2deg); }
+  }
+  @keyframes ember {
+    0% { transform: translateY(0) scale(1); opacity: 0.9; }
+    100% { transform: translateY(-30px) scale(0.3); opacity: 0; }
+  }
+  @keyframes drive {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-1.5px) rotate(-1deg); }
+  }
+  @keyframes speed {
+    0% { opacity: 0; transform: translateX(8px); }
+    40% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(-10px); }
+  }
+  @keyframes road {
+    to { background-position: -20px 0; }
+  }
+}
+
+html { scroll-behavior: smooth; }
+body { @apply bg-stone-50 text-stone-800 antialiased; }

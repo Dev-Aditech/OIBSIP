@@ -1,4 +1,8 @@
+const fs = require('fs');
+const path = require('path');
 const nodemailer = require('nodemailer');
+
+const LOGO_PATH = path.join(__dirname, '..', 'assets', 'logo.png');
 
 let transporter;
 
@@ -6,7 +10,7 @@ async function getTransporter() {
   if (transporter) return transporter;
 
   if (process.env.EMAIL_HOST) {
-    // Real SMTP account (set these in .env when you want real emails)
+    // Real SMTP account (set these in .env)
     transporter = nodemailer.createTransport({
       host: process.env.EMAIL_HOST,
       port: Number(process.env.EMAIL_PORT) || 587,
@@ -27,11 +31,16 @@ async function getTransporter() {
 
 module.exports = async function sendEmail({ to, subject, html }) {
   const t = await getTransporter();
+  const attachments = fs.existsSync(LOGO_PATH)
+    ? [{ filename: 'logo.png', path: LOGO_PATH, cid: 'logo' }]
+    : [];
+
   const info = await t.sendMail({
-    from: process.env.EMAIL_FROM || '"Pizza App" <no-reply@pizzaapp.com>',
+    from: process.env.EMAIL_FROM || '"SliceCraft" <no-reply@slicecraft.com>',
     to,
     subject,
     html,
+    attachments,
   });
 
   const preview = nodemailer.getTestMessageUrl(info);
