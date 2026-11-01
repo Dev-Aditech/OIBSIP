@@ -94,34 +94,34 @@ All items from the Level 3 task card are implemented.
 
 | Page | Preview |
 |---|---|
-| Landing page | ![Landing page](screenshots/01-landing.png) |
-| Registration, step 1 | ![Registration step 1](screenshots/02-register-step1.png) |
-| Registration, step 2 | ![Registration step 2](screenshots/03-register-step2.png) |
-| Login | ![Login](screenshots/04-login.png) |
-| Dashboard | ![Customer dashboard](screenshots/05-dashboard.png) |
-| Pizza builder | ![Pizza builder](screenshots/06-builder.png) |
-| Order summary | ![Order summary](screenshots/07-summary.png) |
-| Razorpay checkout | ![Razorpay checkout](screenshots/08-razorpay.png) |
-| Live order tracking | ![Live order tracking](screenshots/09-live-tracking.png) |
-| Profile | ![Profile](screenshots/10-profile.png) |
+| Landing page | ![Landing page](./WebDev-L3-PizzaDelivery/screenshots/01-landing.png) |
+| Registration, step 1 | ![Registration step 1](./WebDev-L3-PizzaDelivery/screenshots/02-register-step1.png) |
+| Registration, step 2 | ![Registration step 2](./WebDev-L3-PizzaDelivery/screenshots/03-register-step2.png) |
+| Login | ![Login](./WebDev-L3-PizzaDelivery/screenshots/04-login.png) |
+| Dashboard | ![Customer dashboard](./WebDev-L3-PizzaDelivery/screenshots/05-dashboard.png) |
+| Pizza builder | ![Pizza builder](./WebDev-L3-PizzaDelivery/screenshots/06-builder.png) |
+| Order summary | ![Order summary](./WebDev-L3-PizzaDelivery/screenshots/07-summary.png) |
+| Razorpay checkout | ![Razorpay checkout](./WebDev-L3-PizzaDelivery/screenshots/08-razorpay.png) |
+| Live order tracking | ![Live order tracking](./WebDev-L3-PizzaDelivery/screenshots/09-live-tracking.png) |
+| Profile | ![Profile](./WebDev-L3-PizzaDelivery/screenshots/10-profile.png) |
 
 ### Admin
 
 | Page | Preview |
 |---|---|
-| Overview | ![Admin overview](screenshots/11-admin-overview.png) |
-| Inventory | ![Admin inventory](screenshots/12-admin-inventory.png) |
-| Order board | ![Admin order board](screenshots/13-admin-orders.png) |
-| Customers | ![Admin customers](screenshots/14-admin-customers.png) |
-| Reports | ![Admin reports](screenshots/15-admin-reports.png) |
-| Settings | ![Admin settings](screenshots/16-admin-settings.png) |
+| Overview | ![Admin overview](./WebDev-L3-PizzaDelivery/screenshots/11-admin-overview.png) |
+| Inventory | ![Admin inventory](./WebDev-L3-PizzaDelivery/screenshots/12-admin-inventory.png) |
+| Order board | ![Admin order board](./WebDev-L3-PizzaDelivery/screenshots/13-admin-orders.png) |
+| Customers | ![Admin customers](./WebDev-L3-PizzaDelivery/screenshots/14-admin-customers.png) |
+| Reports | ![Admin reports](./WebDev-L3-PizzaDelivery/screenshots/15-admin-reports.png) |
+| Settings | ![Admin settings](./WebDev-L3-PizzaDelivery/screenshots/16-admin-settings.png) |
 
 ### Emails
 
 | Email | Preview |
 |---|---|
-| Verification email | ![Verification email](screenshots/17-email-verification.png) |
-| Low-stock alert | ![Low-stock alert](screenshots/18-email-low-stock.png) |
+| Verification email | ![Verification email](./WebDev-L3-PizzaDelivery/screenshots/17-email-verification.png) |
+| Low-stock alert | ![Low-stock alert](./WebDev-L3-PizzaDelivery/screenshots/18-email-low-stock.png) |
 
 ---
 
