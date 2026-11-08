@@ -6,7 +6,7 @@ A MERN-stack pizza ordering and inventory management platform. Customers build t
 > **Track:** Web Development & Designing, **Level 3**, Task 1: Pizza Delivery Full-Stack Application.
 > **Author:** Adisa Nureni Olaniyi ([@Dev-Aditech](https://github.com/Dev-Aditech))
 
-**Demo video:** ADD-LINKEDIN-POST-LINK-HERE
+**Demo video:** https://lnkd.in/p/dsq3X9b2
 
 ---
 
